@@ -15,21 +15,34 @@
         }
 
         body {
-            /* 高级浅灰底色，柔和不刺眼 */
             background-color: #f8f9fa;
             color: #222222;
             min-height: 100vh;
-            /* 弹性布局垂直居中 */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* 全局过渡动画，所有交互顺滑 */
             transition: all 0.4s ease;
         }
 
-        /* 主容器卡片，精致圆角柔和阴影 */
-        .card {
+        /* 默认隐藏主页内容（密码验证） */
+        .main-content{
+            display: none;
+            width: 100%;
+            position: relative;
+        }
+
+        /* 页面容器 */
+        .page-wrap {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 页面卡片样式 */
+        .page {
             text-align: center;
             padding: 80px 60px;
             background: #ffffff;
@@ -37,13 +50,17 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
             max-width: 520px;
             width: 90%;
+            display: none;
+        }
+        .page.active {
+            display: block;
         }
 
-        /* 姓名主标题 核心视觉 */
+        /* 姓名主标题 */
         .name {
             font-size: 46px;
             font-weight: 500;
-            letter-spacing: 12px; /* 字间距拉满，高级简约 */
+            letter-spacing: 12px;
             margin-bottom: 16px;
         }
 
@@ -56,7 +73,7 @@
             font-weight: 300;
         }
 
-        /* 分割细线，极简装饰 */
+        /* 分割细线 */
         .line {
             width: 70px;
             height: 1px;
@@ -79,8 +96,6 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-
-        /* 链接样式 无下划线 hover柔和变色 */
         .links a {
             text-decoration: none;
             color: #444444;
@@ -92,6 +107,41 @@
             color: #000000;
         }
 
+        /* 翻页箭头 */
+        .arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            color:#999;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.3s;
+            padding: 10px;
+        }
+        .arrow:hover{
+            color:#222;
+        }
+        .prev {
+            left: 30px;
+        }
+        .next {
+            right: 30px;
+        }
+        /* 不可点击时变浅 */
+        .arrow.disabled{
+            color:#ddd;
+            cursor: default;
+        }
+
+        /* 页码指示器 */
+        .page-index{
+            position: fixed;
+            bottom: 30px;
+            font-size:13px;
+            color:#999;
+        }
+
         /* 底部小字版权 */
         .footer {
             margin-top: 40px;
@@ -99,39 +149,69 @@
             color: #aaaaaa;
         }
 
-        /* 手机端适配缩小尺寸 */
+        /* 手机端适配 */
         @media (max-width: 480px) {
             .name {
                 font-size: 32px;
                 letter-spacing: 8px;
             }
-            .card {
+            .page {
                 padding: 50px 30px;
             }
-            .links {
-                gap: 20px;
+            .prev{
+                left:8px;
             }
-        }
-
-        /* 默认隐藏主页内容 */
-        .main-content{
-            display: none;
+            .next{
+                right:8px;
+            }
+            .arrow{
+                font-size:28px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="main-content">
-        <div class="card">
-            <!-- 姓名标题 -->
-            <h1 class="name">林</h1>
-            <p class="en-name">LIN</p>
-            <!-- 简约分割线 -->
-            <div class="line"></div>
-            <!-- 个人简介，可自行修改 -->
-            <div class="intro">
-                这是我的小站
+        <!-- 左箭头 -->
+        <div class="arrow prev" id="prevBtn">←</div>
+        <!-- 右箭头 -->
+        <div class="arrow next" id="nextBtn">→</div>
+
+        <div class="page-wrap">
+            <!-- 第1页 -->
+            <div class="page active" data-page="1">
+                <h1 class="name">林</h1>
+                <p class="en-name">LIN</p>
+                <div class="line"></div>
+                <div class="intro">
+                    这是我的小站
+                </div>
+            </div>
+
+            <!-- 第2页 -->
+            <div class="page" data-page="2">
+                <h1 class="name">你好</h1>
+                <p class="en-name">HELLO</p>
+                <div class="line"></div>
+                <div class="intro">
+                    很高兴与你相遇
+                </div>
+            </div>
+
+            <!-- 第3页 -->
+            <div class="page" data-page="3">
+                <h1 class="name">这是我的网站</h1>
+                <p class="en-name">MY WEBSITE</p>
+                <div class="line"></div>
+                <div class="intro">
+                    欢迎来到我的个人主页
+                </div>
             </div>
         </div>
+
+        <!-- 页码显示 -->
+        <div class="page-index" id="pageText">第 1 / 3 页</div>
+
         <!-- 底部版权 -->
         <div class="footer">
             © 2026 林 All Rights Reserved
@@ -147,8 +227,44 @@ window.onload = function(){
     while(inputPwd !== PASSWORD){
         inputPwd = prompt("密码错误，请重新输入！");
     }
-    // 密码正确，展示页面
     document.querySelector('.main-content').style.display = 'block';
+    initPageSwitch();
+}
+
+// 翻页逻辑
+function initPageSwitch(){
+    const pages = document.querySelectorAll('.page');
+    const totalPage = pages.length;
+    let current = 1;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageText = document.getElementById('pageText');
+
+    function updateUI(){
+        // 切换页面显示
+        pages.forEach(p=>p.classList.remove('active'));
+        document.querySelector(`.page[data-page="${current}"]`).classList.add('active');
+        pageText.innerText = `第 ${current} / ${totalPage} 页`;
+
+        // 首尾页禁用箭头
+        prevBtn.classList.toggle('disabled', current === 1);
+        nextBtn.classList.toggle('disabled', current === totalPage);
+    }
+
+    prevBtn.onclick = ()=>{
+        if(current > 1){
+            current--;
+            updateUI();
+        }
+    }
+    nextBtn.onclick = ()=>{
+        if(current < totalPage){
+            current++;
+            updateUI();
+        }
+    }
+    updateUI();
 }
 </script>
 </body>
