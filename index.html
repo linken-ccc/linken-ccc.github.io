@@ -112,23 +112,44 @@
                 gap: 20px;
             }
         }
+
+        /* 默认隐藏主页内容 */
+        .main-content{
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- 姓名标题 -->
-        <h1 class="name">林家赫</h1>
-        <p class="en-name">LIN JIAHE</p>
-        <!-- 简约分割线 -->
-        <div class="line"></div>
-        <!-- 个人简介，可自行修改 -->
-        <div class="intro">
-            这是我的小站
+    <div class="main-content">
+        <div class="card">
+            <!-- 姓名标题 -->
+            <h1 class="name">林</h1>
+            <p class="en-name">LIN</p>
+            <!-- 简约分割线 -->
+            <div class="line"></div>
+            <!-- 个人简介，可自行修改 -->
+            <div class="intro">
+                这是我的小站
+            </div>
+        </div>
+        <!-- 底部版权 -->
+        <div class="footer">
+            © 2026 林 All Rights Reserved
         </div>
     </div>
-    <!-- 底部版权 -->
-    <div class="footer">
-        © 2026 林家赫 All Rights Reserved
-    </div>
+
+<script>
+// 访问密码
+const PASSWORD = "123456";
+
+window.onload = function(){
+    let inputPwd = prompt("请输入访问密码：");
+    while(inputPwd !== PASSWORD){
+        inputPwd = prompt("密码错误，请重新输入！");
+    }
+    // 密码正确，展示页面
+    document.querySelector('.main-content').style.display = 'block';
+}
+</script>
 </body>
 </html>
