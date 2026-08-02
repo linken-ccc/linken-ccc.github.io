@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 移动端自适应 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林家赫 | Personal Page</title>
+    <style>
+        /* 全局样式重置，统一简约基调 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", 思源黑体, sans-serif;
+        }
+
+        body {
+            /* 高级浅灰底色，柔和不刺眼 */
+            background-color: #f8f9fa;
+            color: #222222;
+            min-height: 100vh;
+            /* 弹性布局垂直居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* 全局过渡动画，所有交互顺滑 */
+            transition: all 0.4s ease;
+        }
+
+        /* 主容器卡片，精致圆角柔和阴影 */
+        .card {
+            text-align: center;
+            padding: 80px 60px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            max-width: 520px;
+            width: 90%;
+        }
+
+        /* 姓名主标题 核心视觉 */
+        .name {
+            font-size: 46px;
+            font-weight: 500;
+            letter-spacing: 12px; /* 字间距拉满，高级简约 */
+            margin-bottom: 16px;
+        }
+
+        /* 英文副标题 */
+        .en-name {
+            font-size: 16px;
+            color: #777777;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* 分割细线，极简装饰 */
+        .line {
+            width: 70px;
+            height: 1px;
+            background: #cccccc;
+            margin: 0 auto 40px;
+        }
+
+        /* 简介文字区域 */
+        .intro {
+            font-size: 15px;
+            color: #555555;
+            line-height: 2;
+            margin-bottom: 50px;
+        }
+
+        /* 导航链接行 */
+        .links {
+            display: flex;
+            gap: 36px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* 链接样式 无下划线 hover柔和变色 */
+        .links a {
+            text-decoration: none;
+            color: #444444;
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: #000000;
+        }
+
+        /* 底部小字版权 */
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        /* 手机端适配缩小尺寸 */
+        @media (max-width: 480px) {
+            .name {
+                font-size: 32px;
+                letter-spacing: 8px;
+            }
+            .card {
+                padding: 50px 30px;
+            }
+            .links {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- 姓名标题 -->
+        <h1 class="name">林家赫</h1>
+        <p class="en-name">LIN JIAHE</p>
+        <!-- 简约分割线 -->
+        <div class="line"></div>
+        <!-- 个人简介，可自行修改 -->
+        <div class="intro">
+            这是我的小站
+        </div>
+    </div>
+    <!-- 底部版权 -->
+    <div class="footer">
+        © 2026 林家赫 All Rights Reserved
+    </div>
+</body>
+</html>
