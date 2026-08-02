@@ -108,12 +108,59 @@
             display:flex;
             align-items:center;
             gap:8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .file-item:hover{
+            color:#000;
+            padding-left:4px;
         }
         .folder-icon::before{
             content:"📁";
         }
         .txt-icon::before{
             content:"📄";
+        }
+
+        /* 弹窗样式 */
+        .modal{
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.4);
+            z-index:999;
+            align-items:center;
+            justify-content:center;
+        }
+        .modal-box{
+            background:#fff;
+            width:90%;
+            max-width:480px;
+            padding:30px;
+            border-radius:12px;
+        }
+        .modal h3{
+            margin-bottom:16px;
+        }
+        .modal-content{
+            min-height:120px;
+            line-height:1.8;
+            color:#444;
+            white-space:pre-wrap;
+        }
+        .close-modal{
+            margin-top:20px;
+            padding:8px 24px;
+            border:1px solid #ccc;
+            background:#fff;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .modal.show{
+            display:flex;
         }
 
         /* 导航链接行 */
@@ -242,22 +289,31 @@
                 </div>
             </div>
 
-            <!-- 第4页【新增】：5个文本文档 + 1个文件夹 -->
+            <!-- 第4页【文件页面】 -->
             <div class="page" data-page="4">
                 <h1 class="name">文件</h1>
                 <p class="en-name">FILE LIST</p>
                 <div class="line"></div>
                 <div class="intro">
-                    站内文件清单
+                    站内文件清单（点击文件打开）
                 </div>
                 <div class="file-list">
-                    <div class="file-item folder-icon">archive（文件夹）</div>
-                    <div class="file-item txt-icon">note01.txt</div>
-                    <div class="file-item txt-icon">note02.txt</div>
-                    <div class="file-item txt-icon">log.txt</div>
-                    <div class="file-item txt-icon">draft.txt</div>
-                    <div class="file-item txt-icon">readme.txt</div>
+                    <div class="file-item folder-icon" data-file="archive">archive（文件夹）</div>
+                    <div class="file-item txt-icon" data-file="note01">note01.txt</div>
+                    <div class="file-item txt-icon" data-file="note02">note02.txt</div>
+                    <div class="file-item txt-icon" data-file="log">log.txt</div>
+                    <div class="file-item txt-icon" data-file="draft">draft.txt</div>
+                    <div class="file-item txt-icon" data-file="readme">readme.txt</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 文件弹窗 -->
+        <div class="modal" id="fileModal">
+            <div class="modal-box">
+                <h3 id="modalTitle"></h3>
+                <div class="modal-content" id="modalText"></div>
+                <button class="close-modal">关闭</button>
             </div>
         </div>
 
@@ -280,6 +336,16 @@
 // 访问密码
 const PASSWORD = "123456";
 
+// 文件内容配置，你可以自由修改里面文字
+const fileData = {
+    archive: "【archive 文件夹】\n这是一个归档文件夹，存放历史资料。\n内部文件：暂无开放。",
+    note01: "笔记01\n记录一些日常想法。",
+    note02: "笔记02\n零碎备忘录。",
+    log: "运行日志\n网站日常记录。",
+    draft: "草稿文档\n未整理内容。",
+    readme: "欢迎访问本站！\n这是个人简易站点。"
+};
+
 window.onload = function(){
     let inputPwd = prompt("请输入访问密码：");
     // 修复：用户点击取消(inputPwd === null)直接退出，不再循环弹窗
@@ -291,6 +357,31 @@ window.onload = function(){
 
     document.querySelector('.main-content').style.display = 'block';
     initPageSwitch();
+    initFileModal();
+}
+
+// 文件弹窗初始化
+function initFileModal(){
+    const modal = document.getElementById('fileModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const closeBtn = document.querySelector('.close-modal');
+    const fileItems = document.querySelectorAll('.file-item');
+
+    // 点击文件打开弹窗
+    fileItems.forEach(item=>{
+        item.onclick = function(){
+            const fid = this.dataset.file;
+            modalTitle.innerText = this.innerText;
+            modalText.innerText = fileData[fid];
+            modal.classList.add('show');
+        }
+    })
+    // 关闭弹窗
+    closeBtn.onclick = ()=> modal.classList.remove('show');
+    modal.onclick = (e)=>{
+        if(e.target === modal) modal.classList.remove('show');
+    }
 }
 
 // 翻页逻辑
