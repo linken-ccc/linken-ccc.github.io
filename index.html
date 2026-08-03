@@ -14,15 +14,41 @@
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
         }
 
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #222222;
+            --text-second: #555555;
+            --text-light: #777777;
+            --text-hint: #aaaaaa;
+            --border-line: #cccccc;
+            --hover-text: #000000;
+            --shadow: rgba(0, 0, 0, 0.06);
+            --modal-mask: rgba(0, 0, 0, 0.4);
+        }
+        /* 深色主题变量 */
+        body.dark {
+            --bg-color: #121418;
+            --card-bg: #1e2127;
+            --text-main: #f0f0f0;
+            --text-second: #c8c8c8;
+            --text-light: #999999;
+            --text-hint: #666666;
+            --border-line: #444444;
+            --hover-text: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --modal-mask: rgba(0, 0, 0, 0.7);
+        }
+
         body {
-            background-color: #f8f9fa;
-            color: #222222;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: all 0.4s ease;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         /* 默认隐藏主页内容（密码验证） */
@@ -45,14 +71,14 @@
         .page {
             text-align: center;
             padding: 80px 60px;
-            background: #ffffff;
+            background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 8px 30px var(--shadow);
             max-width: 520px;
             width: 90%;
             opacity: 0;
             transform: translateY(10px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, background 0.4s;
             position: absolute;
             pointer-events: none;
         }
@@ -73,7 +99,7 @@
         /* 英文副标题 */
         .en-name {
             font-size: 16px;
-            color: #777777;
+            color: var(--text-light);
             letter-spacing: 3px;
             margin-bottom: 40px;
             font-weight: 300;
@@ -83,14 +109,14 @@
         .line {
             width: 70px;
             height: 1px;
-            background: #cccccc;
+            background: var(--border-line);
             margin: 0 auto 40px;
         }
 
         /* 简介文字区域 */
         .intro {
             font-size: 15px;
-            color: #555555;
+            color: var(--text-second);
             line-height: 2;
             margin-bottom: 30px;
         }
@@ -103,17 +129,20 @@
             font-size:15px;
         }
         .file-item {
-            padding:6px 0;
-            color:#444;
+            padding:8px 0;
+            color:var(--text-second);
             display:flex;
             align-items:center;
             gap:8px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.25s ease;
+            border-radius: 6px;
+            padding-left: 6px;
         }
         .file-item:hover{
-            color:#000;
-            padding-left:4px;
+            color:var(--hover-text);
+            padding-left:12px;
+            background: rgba(128,128,128,0.08);
         }
         .folder-icon::before{
             content:"📁";
@@ -130,34 +159,41 @@
             left:0;
             width:100%;
             height:100%;
-            background:rgba(0,0,0,0.4);
+            background:var(--modal-mask);
             z-index:999;
             align-items:center;
             justify-content:center;
         }
         .modal-box{
-            background:#fff;
+            background:var(--card-bg);
             width:90%;
             max-width:480px;
             padding:30px;
             border-radius:12px;
+            transition: background 0.4s;
         }
         .modal h3{
             margin-bottom:16px;
+            color: var(--text-main);
         }
         .modal-content{
             min-height:120px;
             line-height:1.8;
-            color:#444;
+            color:var(--text-second);
             white-space:pre-wrap;
         }
         .close-modal{
             margin-top:20px;
             padding:8px 24px;
-            border:1px solid #ccc;
-            background:#fff;
+            border:1px solid var(--border-line);
+            background:transparent;
+            color: var(--text-main);
             border-radius:6px;
             cursor:pointer;
+            transition: 0.2s;
+        }
+        .close-modal:hover{
+            background: rgba(128,128,128,0.1);
         }
         .modal.show{
             display:flex;
@@ -172,13 +208,13 @@
         }
         .links a {
             text-decoration: none;
-            color: #444444;
+            color: var(--text-second);
             font-size: 14px;
             letter-spacing: 1px;
             transition: color 0.3s;
         }
         .links a:hover {
-            color: #000000;
+            color: var(--hover-text);
         }
 
         /* 翻页箭头 */
@@ -187,15 +223,15 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 40px;
-            color:#999;
+            color:var(--text-light);
             cursor: pointer;
             user-select: none;
             transition: color 0.3s;
-            padding: 10px;
+            padding: 16px;
             z-index: 10;
         }
         .arrow:hover{
-            color:#222;
+            color: var(--hover-text);
         }
         .prev {
             left: 30px;
@@ -205,7 +241,8 @@
         }
         /* 不可点击时变浅 */
         .arrow.disabled{
-            color:#ddd;
+            color:#666;
+            opacity:0.3;
             cursor: default;
             pointer-events: none;
         }
@@ -215,7 +252,7 @@
             position: fixed;
             bottom: 60px;
             font-size:13px;
-            color:#999;
+            color:var(--text-light);
         }
 
         /* 底部小字版权 */
@@ -223,9 +260,30 @@
             position: fixed;
             bottom:20px;
             font-size: 12px;
-            color: #aaaaaa;
+            color: var(--text-hint);
             text-align:center;
             width:100%;
+            line-height:1.6;
+        }
+
+        /* 主题切换按钮 */
+        .theme-btn {
+            position: fixed;
+            bottom: 60px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border-line);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .theme-btn:hover {
+            transform: scale(1.1);
         }
 
         /* 手机端适配 */
@@ -238,13 +296,18 @@
                 padding: 50px 30px;
             }
             .prev{
-                left:8px;
+                left:0;
             }
             .next{
-                right:8px;
+                right:0;
             }
             .arrow{
                 font-size:28px;
+                padding:20px 10px;
+            }
+            .theme-btn {
+                right: 15px;
+                bottom: 50px;
             }
         }
     </style>
@@ -253,6 +316,9 @@
 </head>
 <body>
     <div class="main-content">
+        <!-- 主题切换按钮 -->
+        <button class="theme-btn" id="themeToggle">🌙</button>
+
         <!-- 左箭头 -->
         <div class="arrow prev" id="prevBtn">←</div>
         <!-- 右箭头 -->
@@ -321,12 +387,12 @@
         <!-- 底部版权 & 访问统计 -->
         <div class="footer">
             © 2026 林 All Rights Reserved<br>
-            今日总访问量 <span id="busuanzi_today_pv">加载中...</span> 次
-            今日总访客数 <span id="busuanzi_today_uv">加载中...</span> 人<br>
-            本站总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
-            本站总访客数 <span id="busuanzi_site_uv">加载中...</span> 人<br>
-            本页总阅读量 <span id="busuanzi_page_pv">加载中...</span> 次
-            本页总访客数 <span id="busuanzi_page_uv">加载中...</span> 人
+            今日总访问量 <span id="busuanzi_today_pv">--</span> 次
+            今日总访客数 <span id="busuanzi_today_uv">--</span> 人<br>
+            本站总访问量 <span id="busuanzi_site_pv">--</span> 次
+            本站总访客数 <span id="busuanzi_site_uv">--</span> 人<br>
+            本页总阅读量 <span id="busuanzi_page_pv">--</span> 次
+            本页总访客数 <span id="busuanzi_page_uv">--</span> 人
         </div>
     </div>
 
@@ -343,17 +409,53 @@ const fileData = {
 };
 
 window.onload = function(){
+    // 读取本地存储主题
+    initTheme();
+
     let inputPwd = prompt("请输入访问密码：");
-    // 修复：用户点击取消(inputPwd === null)直接退出，不再循环弹窗
-    while(inputPwd !== null && inputPwd !== PASSWORD){
-        inputPwd = prompt("密码错误，请重新输入！点击取消关闭页面");
+    // 用户点击取消直接关闭页面，不再弹窗循环
+    if(inputPwd === null){
+        document.body.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;color:#777'>已取消访问</div>";
+        return;
     }
-    // 取消输入直接停止加载站点
-    if(inputPwd === null) return;
+    // 密码错误循环弹窗
+    while(inputPwd !== PASSWORD){
+        inputPwd = prompt("密码错误，请重新输入！点击取消关闭页面");
+        if(inputPwd === null){
+            document.body.innerHTML = "<div style='display:flex;justify-content:center;align-items:center;height:100vh;color:#777'>已取消访问</div>";
+            return;
+        }
+    }
 
     document.querySelector('.main-content').style.display = 'block';
     initPageSwitch();
     initFileModal();
+}
+
+// 主题切换初始化
+function initTheme(){
+    const body = document.body;
+    const themeBtn = document.getElementById('themeToggle');
+    const saveTheme = localStorage.getItem('site-theme');
+    // 读取本地存储主题
+    if(saveTheme === 'dark'){
+        body.classList.add('dark');
+        themeBtn.innerText = '☀️';
+    }else{
+        body.classList.remove('dark');
+        themeBtn.innerText = '🌙';
+    }
+    // 切换点击事件
+    themeBtn.onclick = ()=>{
+        body.classList.toggle('dark');
+        if(body.classList.contains('dark')){
+            themeBtn.innerText = '☀️';
+            localStorage.setItem('site-theme','dark');
+        }else{
+            themeBtn.innerText = '🌙';
+            localStorage.setItem('site-theme','light');
+        }
+    }
 }
 
 // 文件弹窗初始化
@@ -378,6 +480,12 @@ function initFileModal(){
     modal.onclick = (e)=>{
         if(e.target === modal) modal.classList.remove('show');
     }
+    // ESC按键关闭弹窗
+    document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && modal.classList.contains('show')){
+            modal.classList.remove('show');
+        }
+    })
 }
 
 // 翻页逻辑
@@ -414,6 +522,10 @@ function initPageSwitch(){
 
     // 新增：键盘 ← → 方向键翻页
     document.addEventListener('keydown', (e)=>{
+        // 弹窗打开时禁止翻页
+        const modal = document.getElementById('fileModal');
+        if(modal.classList.contains('show')) return;
+
         if(e.key === 'ArrowLeft' && current > 1){
             current--;
             updateUI();
