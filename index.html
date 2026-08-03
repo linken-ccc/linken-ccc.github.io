@@ -55,6 +55,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            position: relative;
         }
         .page {
             text-align: center;
@@ -438,5 +439,101 @@ const fileData = {
 　　全家四个人都愣住了，路明非心里像是有只醒来的兔子一蹦一蹦，他已经忘了有多久没有得到父母的准确消息了，每次母亲写信来不过是念念叨叨重复保重身体好好学习之类的，从不提及他们在国外到底做什么。伊塔罗・卡尔维诺作品
 　　“那我能见到他们了？” 路明非急切地问。
 　　古德里安教授摇摇头，“其实我也没有见过他们，听说是一直在忙一个很重要的研究课题，所以这些年一直在南美的丛林里钻进钻出。不过我有一张他们的照片，还有你母亲为了这件事写给学院的信。”
-　　他把相册最后一页那张原本背面向外的照片翻了过来，放在路明非面前的桌子上，那是一个夏天的花园，远处依稀是卡塞尔学院古典而奢华的图书馆，近处则是无数的蔓墙，绿得沉郁而通透，一男一女携手在蔓墙里散步，男的穿了一件宽松的大白衬衣和一条洒腿裤，脚下一双木板拖鞋，女的一件纯白的居家棉裙，倒有点像陈雯雯第一次报到的样子。路明非伸出手指轻轻地触摸画面上两个人的脸
+　　他把相册最后一页那张原本背面向外的照片翻了过来，放在路明非面前的桌子上，那是一个夏天的花园，远处依稀是卡塞尔学院古典而奢华的图书馆，近处则是无数的蔓墙，绿得沉郁而通透，一男一女携手在蔓墙里散步，男的穿了一件宽松的大白衬衣和一条洒腿裤，脚下一双木板拖鞋，女的一件纯白的居家棉裙，倒有点像陈雯雯第一次报到的样子。路明非伸出手指轻轻地触摸画面上两个人的脸`,
+    blank: "空白文档，暂无内容"
+};
+
+// 所有逻辑写在DOM加载完成后
+document.addEventListener('DOMContentLoaded', function(){
+    // 获取DOM元素
+    const pages = document.querySelectorAll('.page');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageText = document.getElementById('pageText');
+    const themeToggle = document.getElementById('themeToggle');
+    const modal = document.getElementById('fileModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const closeModalBtn = document.querySelector('.close-modal');
+    const fileItems = document.querySelectorAll('.file-item');
+
+    let currentPage = 1;
+    const totalPage = pages.length;
+
+    // 更新页码、按钮禁用状态
+    function updatePageUI(){
+        // 更新底部页码文字
+        pageText.textContent = `第 ${currentPage} / ${totalPage} 页`;
+        // 首页禁用上一页
+        if(currentPage <= 1){
+            prevBtn.classList.add('disabled');
+        }else{
+            prevBtn.classList.remove('disabled');
+        }
+        // 末页禁用下一页
+        if(currentPage >= totalPage){
+            nextBtn.classList.add('disabled');
+        }else{
+            nextBtn.classList.remove('disabled');
+        }
+    }
+
+    // 切换页面函数
+    function switchPage(targetNum){
+        // 边界判断
+        if(targetNum < 1 || targetNum > totalPage) return;
+        // 移除所有active
+        pages.forEach(page => page.classList.remove('active'));
+        // 给目标页面加active
+        document.querySelector(`.page[data-page="${targetNum}"]`).classList.add('active');
+        currentPage = targetNum;
+        updatePageUI();
+    }
+
+    // 上一页点击
+    prevBtn.addEventListener('click', function(){
+        switchPage(currentPage - 1);
+    });
+    // 下一页点击
+    nextBtn.addEventListener('click', function(){
+        switchPage(currentPage + 1);
+    });
+
+    // 深色浅色切换
+    themeToggle.addEventListener('click', function(){
+        document.body.classList.toggle('dark');
+        if(document.body.classList.contains('dark')){
+            themeToggle.textContent = '☀️';
+        }else{
+            themeToggle.textContent = '🌙';
+        }
+    });
+
+    // 文件点击弹出弹窗
+    fileItems.forEach(item => {
+        item.addEventListener('click', function(){
+            const fileKey = this.dataset.file;
+            const title = this.textContent.trim();
+            modalTitle.textContent = title;
+            modalText.textContent = fileData[fileKey];
+            modal.classList.add('show');
+        });
+    });
+
+    // 关闭弹窗按钮
+    closeModalBtn.addEventListener('click', function(){
+        modal.classList.remove('show');
+    });
+    // 点击弹窗遮罩层关闭
+    modal.addEventListener('click', function(e){
+        if(e.target === modal){
+            modal.classList.remove('show');
+        }
+    });
+
+    // 初始化UI
+    updatePageUI();
+});
 </script>
+</body>
+</html>
