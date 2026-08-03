@@ -598,4 +598,8 @@ const fileData = {
 };
 
 // DOM加载完成后执行所有逻辑
-document.addEventListener('DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    // 分页相关元素
+    const pages = document.querySelectorAll('.page');
+    const totalPage = pages.length;
+    let currentIndex = 0;
